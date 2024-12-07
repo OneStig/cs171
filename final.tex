@@ -5,7 +5,14 @@
 \usepackage[margin=0.3in]{geometry}
 \usepackage{multicol}
 
-\setlength{\columnsep}{0.4cm}
+\makeatletter
+\g@addto@macro\normalsize{
+    \setlength{\abovedisplayskip}{2pt}
+    \setlength{\belowdisplayskip}{2pt}
+    \setlength{\abovedisplayshortskip}{2pt}
+    \setlength{\belowdisplayshortskip}{2pt}
+}
+\makeatother
 
 \pagestyle{empty}
 
@@ -29,7 +36,7 @@
 
 \vspace{-1em}
 \begin{center}
-    \textbf{\footnotesize CS 171 Final Exam Reference Sheet} \\[-0.5em]
+    \textbf{\footnotesize CS 171 F24 Final Exam Reference Sheet} \\[-0.5em]
     \textit{\scriptsize Created by Steven He}
 \end{center}
 
@@ -38,39 +45,75 @@
 \begin{multicols*}{2}
 
 \begin{tcolorbox}[title=Uninformed Search, module]
-    \textbf{placeholder}
+    \textbf{todo}
 \end{tcolorbox}
 
 \begin{tcolorbox}[title=Heuristic Search, module]
-    \textbf{placeholder}
+    \textbf{todo}
 \end{tcolorbox}
 
 \begin{tcolorbox}[title=Game Search, module]
-    \textbf{placeholder}
+    \textbf{todo}
 \end{tcolorbox}
 
 \begin{tcolorbox}[title=Constraint Satisfaction, module]
-    \textbf{placeholder}
+    \textbf{todo}
 \end{tcolorbox}
 
 \begin{tcolorbox}[title=Logic, module]
-    \textbf{placeholder}
+    \textbf{todo}
 \end{tcolorbox}
 
 \begin{tcolorbox}[title={Probability \& Uncertainty, Bayesian Networks}, module]
-    \textbf{placeholder}
+    \textbf{todo}
 \end{tcolorbox}
 
 \begin{tcolorbox}[title={Intro to ML, Linear Regression, kNN}, module]
-    \textbf{placeholder}
+    \textbf{todo}
 \end{tcolorbox}
 
 \begin{tcolorbox}[title={Decision Trees and Neural Networks}, module]
-    \textbf{placeholder}
+    \textbf{todo}
 \end{tcolorbox}
 
 \begin{tcolorbox}[title={Reinforcement Learning}, module]
-    \textbf{placeholder}
+    \textbf{Markov Property} - Future is independent of past given present:
+    \[
+        \mathbb{P}[S_{t + 1} | S_t] = \mathbb{P}[S_{t + 1} | S_1, \ldots, S_t] \text{ where } S_t \text{ is state at time } t
+    \]
+
+    We use matrix $\mathcal{P}$ to define transition property from state $s$ to $s'$, denoted as probability in row $s$, column $s'$.
+    \[
+        \mathcal{P} =
+        \begin{bmatrix}
+            \mathcal{P}_{11} & \ldots & \mathcal{P}_{1n} \\
+            \vdots && \vdots \\
+            \mathcal{P}_{n1} & \ldots & \mathcal{P}_{nn} \\
+        \end{bmatrix}
+        , \mathcal{P}_{ss'} = \mathbb{P}[S_{t+1} = s' | S_t = s]
+    \]
+
+    \textbf{Markov Process/Chain} - Sequence of states $S_1, S_2, \ldots$ satisfying Markov property. Formally defined as tuple $\langle \mathcal{S}, \mathcal{P} \rangle$ i.e. (set of states, prob matrix)
+
+    \textbf{Episode} - Some sequence of traveresed states in a MP
+
+    \textbf{Markov Reward Process} - Give states in MP some reward. We ``gain'' reward $R_{t + 1}$ when transitioning from states $S_t \to S_{t + 1}$
+
+    placeholder intermediary stuff goes here
+
+    \[
+        \begin{tabular}{|c|c|c|}
+            \hline
+            & \textbf{Evaluate Policy, $\pi$} & \textbf{Find Best Policy, $\pi^*$} \\
+            \hline
+            \textbf{MDP Known} & Policy Evaluation & Policy/Value Iteration \\
+            \textbf{(Planning probs)} && \\
+            \hline
+            \textbf{MDP Unknown} & MC and TD Learning & Q-Learning \\
+            \hline
+        \end{tabular}
+    \]
+
 \end{tcolorbox}
 
 \end{multicols*}
