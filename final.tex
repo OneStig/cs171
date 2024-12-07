@@ -5,6 +5,9 @@
 \usepackage[margin=0.3in]{geometry}
 \usepackage{multicol}
 
+\usepackage{enumitem}
+\setlist[itemize]{itemsep=0pt, parsep=0pt, left=2pt, topsep=0pt, labelsep=2pt, label=$\cdot$}
+
 \makeatletter
 \g@addto@macro\normalsize{
     \setlength{\abovedisplayskip}{2pt}
@@ -45,8 +48,30 @@
 \begin{multicols*}{2}
 
 \begin{tcolorbox}[title=Uninformed Search, module]
-    \textbf{todo}
+    A \textbf{state} represents particular configuration of environment. \textbf{Nodes} in search tree can encode details like state, parent, action, path cost, depth, etc.
+
+    \textbf{Tree Search} doesn't remember visited nodes: slow search, low memory
+    \textbf{Graph Search} remembers visited nodes: fast search, high memory
+
+    Basic search scheme maintains explored and frontier nodes. Process the frontier in some order based on some policy/search strategy, marking as visited if graph search, then expanding node.
+
+    \textbf{Strategies evaluted by:}
+    \begin{itemize}
+        \item \textit{completeness} - does it guarantee a solution if one exists
+        \item \textit{optimality} - does it guarantee min-cost solution
+        \item \textit{time/space complexity} - \# of nodes generated / max \# of nodes in memory. In terms of max branching factor $b$, depth of min-cost solution $d$, maximum depth of state space $m$.
+    \end{itemize}
+
+    \textbf{Uninformed search strategies:}
+    \begin{itemize}
+        \item \textit{Breadth-first Search} - Frontier is FIFO queue. Goal test before pushing to queue. Always complete; only optimal if cost is monotonic non-decreasing function of depth.
+        \item \textit{Uniform-cost Search} - Frontier is priority queue, ordered by total path cost $g(n)$. Goal test after popping from queue. Complete if $b$ is finite; optimal if all step costs $\ge \epsilon > 0$ (non-zero).
+        \item \textit{Depth-first Search} - Frontier is LIFO stack. Defined as Depth-limited search with limit $l = \infty$. Goal test after pop from stack. Incomplete if depth of states is infinite; not optimal.
+        \item \textit{Iterative Deepening Search} - Perform Depth-limited search, while iteratively increasing depth limit. Memory advantage of DFS, completeness \& optimality conditions of BFS.
+    \end{itemize}
+
 \end{tcolorbox}
+
 
 \begin{tcolorbox}[title=Heuristic Search, module]
     \textbf{todo}
