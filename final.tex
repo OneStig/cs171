@@ -31,6 +31,8 @@
 \pagestyle{empty}
 \raggedbottom
 
+\DeclareMathOperator*{\argmax}{arg\,max}    
+
 \tcbset{
     module/.style={
         colback=white,
@@ -176,6 +178,26 @@
 
     \textbf{Iterative deepening reordering} can be applied to improve pruning. E.g. reorder children based on heuristic at each layer to be non-increasing on max layer and non-decreasing on min.
 
+    \textbf{Expectimax} - Variant of Minimax for nondeterministic games, where utility factors in probability. $\alpha \beta$-pruning still fundamentally works.
+    \textbf{Monte Carlo Tree Search} - Sampling outcomes to determine moves when branching factor is too high. Sample = self-play rollout, simulate entire game until terminal node.
+
+    \textit{Exploitation} is making the best decision given current info vs. \textit{exploration} is gathering more info.
+
+    Select action maximizing Upper Confidence Bound (UCB), since we choose to be optimistic even with uncertainty.
+    \[
+        a_t = \argmax_{a \in \mathcal{A}}  \hat{Q}_t(a) + \hat{U}_t(a)
+    \]
+    Where $\hat{Q}_t(a)$ is estimate of action $a$, and $\hat{U}_t(a)$ is the uncertainty of $a$. Optimistically the upper bound is the sum.
+    \[
+        \text{Hoeffding's Inequality: } \mathbb{P}[Q(a) > \hat{Q}_t(a) + \hat{U}_t(a)] \le e^{-2N_t(a)U_t(a)^2}
+    \]
+
+    i.e. The probability UCB under estimated true value of $a$ (we made a mistake), based on samples of action $a$, $N_t(a)$ and uncertainty $U_t(a)^2$.
+    \[\textbf{MCTS Move Selection}\]
+    \[
+        \text{UCB} = \frac{w_i}{s_i} + c \sqrt{\frac{\ln{s_p}}{s_i}}
+    \]
+    Where $\frac{w}{s}$ denotes $\frac{\text{parent wins}}{\text{samples}}$, having selected node $i$ with parent $p$, and $c$ is some exploration parameter. To pick a move for $p$, select child with highest computed UCT. Once a leaf node is reached, simulate rest of the game and propagate results back up the tree.
 
 \end{tcolorbox}
 
