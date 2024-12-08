@@ -166,7 +166,17 @@
 \end{tcolorbox}
 
 \begin{tcolorbox}[title=Game Search, module]
-    \textbf{todo}
+    Games have an adversary, where solution is a strategy.
+
+    \textbf{MiniMax} - Generate full game tree. Assume that opponent plays optimally and tries to minimize your utility. Max nodes compute max of its children, Min nodes compute min of its children. Complete if tree is finite, optimal against an optimal opponent.
+    \textbf{Static heuristic evaluation} estimates utility of a non-terminal state so heuristic MiniMax can stop before terminal nodes.
+    \textbf{Alpha-Beta Pruning}
+
+    Initially $\alpha = -\infty, \beta = \infty$ representing highest value found at MAX node and lowest found at MIN. Pass values down to child in recursive call, and update values after backtracking ($\alpha$ at MAX nodes, $\beta$ at MIN). If we hit pruning condition $\alpha \ge \beta$, stop searching rest of subtree.
+
+    \textbf{Iterative deepening reordering} can be applied to improve pruning. E.g. reorder children based on heuristic at each layer to be non-increasing on max layer and non-decreasing on min.
+
+
 \end{tcolorbox}
 
 \begin{tcolorbox}[title=Constraint Satisfaction, module]
