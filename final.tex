@@ -1,9 +1,20 @@
-\documentclass[a4paper,10pt]{article}
+\documentclass[a4paper,10pt,twocolumn]{article}
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath, amssymb}
 \usepackage{tcolorbox}
+\tcbuselibrary{breakable}
 \usepackage[margin=0.3in]{geometry}
-\usepackage{multicol}
+\usepackage{array,epsfig}
+\usepackage{centernot}
+\usepackage{amsfonts}
+\usepackage{amsxtra}
+\usepackage{amsthm}
+\usepackage{mathrsfs}
+\usepackage{color}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{tikz}
+\usetikzlibrary{calc, decorations.pathmorphing, decorations.pathreplacing, decorations.shapes} 
 
 \usepackage{enumitem}
 \setlist[itemize]{itemsep=0pt, parsep=0pt, left=2pt, topsep=0pt, labelsep=2pt, label=$\cdot$}
@@ -18,6 +29,7 @@
 \makeatother
 
 \pagestyle{empty}
+\raggedbottom
 
 \tcbset{
     module/.style={
@@ -32,20 +44,21 @@
         coltitle=black,
         boxsep=0.5mm,
         left=0.5mm, right=0.5mm, top=0.5mm, bottom=0.5mm,
+        breakable
     },
 }
 
 \begin{document}
 
-\vspace{-1em}
-\begin{center}
-    \textbf{\footnotesize CS 171 F24 Final Exam Reference Sheet} \\[-0.5em]
-    \textit{\scriptsize Created by Steven He}
-\end{center}
+% Switch to single-column mode for the title
+\twocolumn[
+    \begin{center}
+        \textbf{\footnotesize CS 171 F24 Final Exam Reference Sheet} \\
+        \textit{\scriptsize Created by Steven He, 2024}
+    \end{center}
+]
 
 \vspace{-1em}
-
-\begin{multicols*}{2}
 
 \begin{tcolorbox}[title=Uninformed Search, module]
     A \textbf{state} represents particular configuration of environment. \textbf{Nodes} in search tree can encode details like state, parent, action, path cost, depth, etc.
@@ -64,7 +77,7 @@
 
     \textbf{Uninformed search strategies:}
     \begin{itemize}
-        \item \textit{Breadth-first Search} - Frontier is FIFO queue. Goal test before pushing to queue. Always complete; only optimal if cost is monotonic non-decreasing function of depth.
+        \item \textit{Breadth-first Search} - Frontier is FIFO queue. Goal test node before push. Always complete; only optimal if cost is non-decreasing function of depth.
         \item \textit{Uniform-cost Search} - Frontier is priority queue, ordered by total path cost $g(n)$. Goal test after popping from queue. Complete if $b$ is finite; optimal if all step costs $\ge \epsilon > 0$ (non-zero).
         \item \textit{Depth-first Search} - Frontier is LIFO stack. Defined as Depth-limited search with limit $l = \infty$. Goal test after pop from stack. Incomplete if depth of states is infinite; not optimal.
         \item \textit{Iterative Deepening Search} - Perform Depth-limited search, while iteratively increasing depth limit. Memory advantage of DFS, completeness \& optimality conditions of BFS.
@@ -74,7 +87,60 @@
 
 
 \begin{tcolorbox}[title=Heuristic Search, module]
-    \textbf{todo}
+    A \textit{heuristic} estimates best possible cost left to the solution, denoted as $h(n)$.
+
+    \vspace{-1em}
+    \[
+        \begin{tikzpicture}[node distance=2cm, auto]
+            \node[circle, draw, minimum size=0.5cm] (S) {$S$};
+            \node[circle, draw, minimum size=0.5cm, right of=S, xshift=1.5cm] (n) {$n$};
+            \node[circle, draw, minimum size=0.5cm, right of=n, xshift=1.5cm] (G) {$G$};
+
+            \draw[->] (S) -- ($(S)!0.4!(n)$);
+            \node at ($(S)!0.5!(n)$) {\ldots};
+            \draw[->] ($(S)!0.6!(n)$) -- (n);
+
+            \draw[->] (n) -- ($(n)!0.4!(G)$);
+            \node at ($(n)!0.5!(G)$) {\ldots};
+            \draw[->] ($(n)!0.6!(G)$) -- (G);
+
+            \draw [decorate,decoration={brace,amplitude=5pt,mirror,raise=2.5ex}]
+            ($(S.east)!0!(n.west)$) -- ($(S.east)!1!(n.west)$) 
+            node[midway,yshift=-3em] {$g(n)$};
+            
+            \draw [decorate,decoration={brace,amplitude=5pt,mirror,raise=2.5ex}]
+            ($(n.east)!0!(G.west)$) -- ($(n.east)!1!(G.west)$)
+            node[midway,yshift=-3em] {$h(n)$};
+        \end{tikzpicture}
+    \]
+    \vspace{-1em}
+    \[
+        \begin{aligned}
+            g(n) &: \text{known path cost so far to state } n \\
+            h(n) &: \text{estimate of optimal cost to goal from } n \\
+            f(n) = g(n) + h(n) &: \text{estimate of total cost to goal through } n \\
+        \end{aligned}
+    \]
+
+    A heuristic is \textbf{admissible} iff $\forall n, h(n) \le h^*(n)$, where $h^*(n)$ is true optimal cost to goal. Admissible heuristics never overestimate cost to the goal.
+
+    A heuristic is \textbf{consistent} iff $\forall n, f(n') \ge f(n)$ where $n'$ is any successor of $n$. $f(n)$ is non-decreasing along any path.
+
+    \vspace{-1em}
+    \[
+        \begin{aligned}
+            \textbf{consistent} &\implies \textbf{admissible} \\
+            \neg \textbf{admissible} &\implies \neg \textbf{consistent} \\
+            \textbf{admissible} &\centernot \implies \textbf{consistent} \\
+        \end{aligned}
+    \]
+
+    \textbf{Heuristic search strategies:}
+    \begin{itemize}
+        \item \textit{Greedy Best-first Search} - Frontier is priority queue, ordered by heuristic $h(n)$. Only graph version complete in finite spaces; not optimal even with perfect heuristic $h = h^*$.
+        \item $A^*$\textit{Search} - Frontier is priority queue, ordered by heuristic + path cost $f(n)$. Complete unless infinite nodes with $f < f(G)$. Optimal with tree search if $h$ is admissible; graph search if $h$ is consistent. No other algorithm with the same consistent heuristic is guaranteed to expand fewer nodes.
+    \end{itemize}
+
 \end{tcolorbox}
 
 \begin{tcolorbox}[title=Game Search, module]
@@ -140,7 +206,5 @@
     \]
 
 \end{tcolorbox}
-
-\end{multicols*}
 
 \end{document}
