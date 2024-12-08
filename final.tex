@@ -50,7 +50,6 @@
 
 \begin{document}
 
-% Switch to single-column mode for the title
 \twocolumn[
     \begin{center}
         \textbf{\footnotesize CS 171 F24 Final Exam Reference Sheet} \\
@@ -138,7 +137,30 @@
     \textbf{Heuristic search strategies:}
     \begin{itemize}
         \item \textit{Greedy Best-first Search} - Frontier is priority queue, ordered by heuristic $h(n)$. Only graph version complete in finite spaces; not optimal even with perfect heuristic $h = h^*$.
-        \item $A^*$\textit{Search} - Frontier is priority queue, ordered by heuristic + path cost $f(n)$. Complete unless infinite nodes with $f < f(G)$. Optimal with tree search if $h$ is admissible; graph search if $h$ is consistent. No other algorithm with the same consistent heuristic is guaranteed to expand fewer nodes.
+        \item $A^*$\textit{Search} - Frontier is priority queue, ordered by heuristic + path cost $f(n)$. Complete unless infinite nodes with $f < f(G)$. Optimal with tree search if $h$ is admissible; graph search if $h$ is consistent.
+    \end{itemize}
+
+    For two heuristics, if $\forall n, h_2(n) \ge h_1(n)$ then $h_2$ \textbf{dominates} $h_1$. If $h_2$ dominates $h_1$ and both are admissible, then $h_2$ is almost always better, and never expands more nodes than $h_1$.
+
+    A problem with fewer restrictions is called \textbf{relaxed} (add more available actions). The solution of a relaxed problem is at least as good as the solution for the original problem. Intuition: If original problem hard to solve, relax the problem state space that is easy to solve. Solve it exactly and use the solution as heuristic for original problem.
+
+    \textbf{Thm. } Heuristics that are generated from relaxed models are consistent
+
+    \vspace{-0.5em}
+    \[\textbf{Local Search}\]
+    In some problems, path is irrelevant so we might avoid systematic search. The goal state itself is the solution.
+
+    \textbf{Random restart wrapper} - Repeatedly perform local search, each time starting from a new random start state
+
+    \textbf{Tabu search wrapper} - Within each random restart, add visited states to a "tabu" list of states that are temporarily excluded from being revisited.
+
+    \textbf{Local search algorithms:}
+    \begin{itemize}
+        \item \textit{Hill Climbing} - At some current state, always compare to neighboring state with maximum value. If current state has better value, return, otherwise set current to the best neighbor. Neither complete nor optimal since we always approach local and not global optima relative to current position.
+        \item \textit{WalkSAT} - Starting from random assignment, instead of always picking neighbor with most satisfied clauses, with some probability $p$, flip a random symbol (pick random neighbor). Randomness can potentially help escape local optima.
+        \item \textit{Local Beam Search} - Create $k$ random initial states, generate their children, then select $k$ best children. Repeat until goal found.
+        \item \textit{Simulated Annealing} - Intelligently combine random and greedy moves. Some temperature $T$ gradually decreases, representing state volatility. Temperature gives probability of forcing a random move.
+        \item \textit{Genetic ALgorithms} - Mimic biology by mutating some set of offspring by crossing over traits, and selecting individuals based on fitness (heuristic) function.
     \end{itemize}
 
 \end{tcolorbox}
@@ -178,7 +200,7 @@
         \mathcal{P} =
         \begin{bmatrix}
             \mathcal{P}_{11} & \ldots & \mathcal{P}_{1n} \\
-            \vdots && \vdots \\
+            \vdots & \ddots & \vdots \\
             \mathcal{P}_{n1} & \ldots & \mathcal{P}_{nn} \\
         \end{bmatrix}
         , \mathcal{P}_{ss'} = \mathbb{P}[S_{t+1} = s' | S_t = s]
