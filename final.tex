@@ -13,6 +13,7 @@
 \usepackage{color}
 \usepackage{algorithm}
 \usepackage{algpseudocode}
+\usepackage{float}
 \usepackage{tikz}
 \usetikzlibrary{calc, decorations.pathmorphing, decorations.pathreplacing, decorations.shapes} 
 
@@ -202,7 +203,47 @@
 \end{tcolorbox}
 
 \begin{tcolorbox}[title=Constraint Satisfaction, module]
-    \textbf{todo}
+    \textbf{CSP} formally defined as finite set of variables $x_1, \ldots, x_n$, with nonempty domain of possible values $d_1, \ldots, d_n$, a set of constraints $c_1, \ldots, c_m$ defining allowed combinations of values.
+
+    A \textbf{assignment} is \textit{complete} if every variable has a value, \textit{partial} if some variables have no values, \textit{consistent} if no constraints violated. A \textbf{solution} is a complete and consistent assignment. Any CSP can be expressed as a binary CSP.
+
+    When ordering variables for backtracking, prioritize variable selection by \textbf{MRV} (minimum remaining values), then break ties with \textbf{degree heuristic} (variable involved in constraints with the most unassigned variables).
+
+    When ordering values, \textbf{LCV} (Least Constraining Value) heuristic, pick value in remaining domain that rules out fewest values in remaining variables.
+
+    \vspace{-1em}
+    \[\textbf{Inference for CSPs}\]
+    Constructing/deducing new explicit relationships/constraints that were originally implicit.
+
+    \textbf{Forward checking (FC)} - Update effective domain of unassigned variables based on local constraints. Then undo/restore updates on backtrack. If pruned domain of neighbor becomes empty, immediately backtrack.
+
+    \textbf{Constraint propagation} - Similar to FC, but also goes beyond immediate neighbors and \textit{propagates} changes through the graph.
+
+    \textbf{Def.} $\text{Arc}(X_i, X_j)$ is arc-consistent if for every value of $X_i$, there exist a matching (and consistent) value $X_j$.
+
+    \textbf{AC-3 Algorithm} - $O(n^2k^3)$, for $n$ variables and domain size $k$:
+
+    \begin{algorithmic}
+        \State $Q \gets$ queue of all arcs $(X_i, X_j)$ \Comment{Undirected arcs pushed as $(X_i, X_j)$ and $(X_j, X_i)$}
+        \While{$Q$ not empty}
+            \State $(X, Y) \gets$ pop from $Q$
+            \State Remove inconsistent values from $X$
+            \If{Any change in $Domain(X)$}
+                \State Push arcs $(Z, X), \forall Z$ into $Q$
+            \EndIf
+        \EndWhile
+    \end{algorithmic}
+
+    \vspace{0.5em}
+
+    CSP's are NP-Complete, however special easier cases exist:
+    
+    \textbf{Thm. } If a CSP constraint graph is a tree, it can be solved in $O(n k^2)$ time.
+    \textbf{Cutset conditioning} and \textbf{tree decomposition} can exploit this property.
+
+    \underline{\textbf{ADD STUFF FOR IMPROVING BACKTRACKING}}
+    \underline{\textbf{ADD STUFF FOR LOCAL SEARCH FOR CSPS}}
+
 \end{tcolorbox}
 
 \begin{tcolorbox}[title=Logic, module]
